@@ -3,20 +3,17 @@ TARGET = kraken_linux
 
 # Compilador e flags
 CXX = g++
-CXXFLAGS = -O3 -march=native -Wall -Iinclude
+CXXFLAGS = -O3 -march=native -Wall
 
-# Diretórios de origem e objetos
-SRCDIR = src
+# Arquivos fonte e objetos
+SOURCES = main.cpp kraken.cpp
 OBJDIR = build
+OBJECTS = $(SOURCES:%.cpp=$(OBJDIR)/%.o)
 
-# Localização dos arquivos fonte
-SOURCES = $(SRCDIR)/main.cpp $(SRCDIR)/kraken.cpp
-OBJECTS = $(SOURCES:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
-
-# Regra principal (o que acontece quando você digita apenas 'make')
+# Regra principal
 all: prepare $(TARGET)
 
-# Cria a pasta build se ela não existir
+# Cria a pasta de objetos se não existir
 prepare:
 	@mkdir -p $(OBJDIR)
 
@@ -24,11 +21,11 @@ prepare:
 $(TARGET): $(OBJECTS)
 	$(CXX) $(CXXFLAGS) $(OBJECTS) -o $(TARGET)
 
-# Compilação dos arquivos .cpp para .o
-$(OBJDIR)/%.o: $(SRCDIR)/%.cpp
+# Compilação dos arquivos .cpp (Garante que o TAB seja usado aqui)
+$(OBJDIR)/%.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-# Limpeza dos arquivos temporários e do binário
+# Limpeza
 clean:
 	rm -rf $(OBJDIR) $(TARGET)
 
